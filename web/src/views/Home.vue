@@ -48,7 +48,24 @@
       <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
       >
-        <pre>{{ebooks1}}{{ebooks}}</pre>
+        <a-list item-layout="vertical" size="large" :data-source="ebooks1">
+          <template #renderItem="{ item }">
+            <a-list-item key="item.name">
+              <template #actions>
+                <span v-for="{ type, text } in actions" :key="type">
+                  <component v-bind:is="type" style="margin-right: 8px" />
+                  {{ text }}
+                </span>
+              </template>
+              <a-list-item-meta :description="item.description">
+                <template #title>
+                  <a :href="item.href">{{ item.name }}</a>
+                </template>
+                <template #avatar><a-avatar :src="item.cover" /></template>
+              </a-list-item-meta>
+            </a-list-item>
+          </template>
+        </a-list>
       </a-layout-content>
     </a-layout>
 </template>
@@ -57,11 +74,12 @@
 import { defineComponent, onMounted, ref, reactive, toRefs } from 'vue';
 import axios from 'axios';
 
+
 export default defineComponent({
   name: 'Home',
   setup () {
     const ebooks1 = ref();
-    const ebooks2 = reactive({ ebooks: [] })
+    const ebooks2 = reactive({ ebooks: [] });
 
     onMounted(() => {
       axios.get("http://localhost:8880/ebook/list?name=Spring").then((response) => {
@@ -71,9 +89,15 @@ export default defineComponent({
       })
     })
 
-    const { ebooks } = toRefs(ebooks2)
+    const actions: Record<string, string>[] = [
+      { type: 'StarOutlined', text: '156' },
+      { type: 'LikeOutlined', text: '156' },
+      { type: 'MessageOutlined', text: '2' },
+    ];
 
-    return { ebooks1, ebooks }
+    const { ebooks } = toRefs(ebooks2);
+
+    return { ebooks1, ebooks, actions }
   }
 });
 </script>

@@ -14,7 +14,7 @@
   "resolved" "https://registry.nlark.com/@ant-design/icons-svg/download/@ant-design/icons-svg-4.1.0.tgz"
   "version" "4.1.0"
 
-"@ant-design/icons-vue@^6.0.0":
+"@ant-design/icons-vue@^6.0.0", "@ant-design/icons-vue@^6.0.1":
   "integrity" "sha1-nYBMPHTSz6+XyxjlgtO5QAk09f0="
   "resolved" "https://registry.nlark.com/@ant-design/icons-vue/download/@ant-design/icons-vue-6.0.1.tgz"
   "version" "6.0.1"
