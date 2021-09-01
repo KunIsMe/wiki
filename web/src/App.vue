@@ -13,10 +13,7 @@ import TheFooter from '@/components/TheFooter.vue';
 
 export default defineComponent({
   name: 'App',
-  components: {
-    TheHeader,
-    TheFooter
-  }
+  components: { TheHeader, TheFooter }
 });
 </script>
 
