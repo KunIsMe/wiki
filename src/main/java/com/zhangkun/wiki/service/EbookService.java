@@ -1,5 +1,7 @@
 package com.zhangkun.wiki.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zhangkun.wiki.domain.Ebook;
 import com.zhangkun.wiki.domain.EbookExample;
 import com.zhangkun.wiki.mapper.EbookMapper;
@@ -24,7 +26,12 @@ public class EbookService {
         if(!ObjectUtils.isEmpty(req.getName())) {
             criteria.andNameLike("%" + req.getName() + "%");
         }
+        PageHelper.startPage(1, 3);
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
+
+        PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
+        System.out.println("总行数：" + pageInfo.getTotal());
+        System.out.println("总页数：" + pageInfo.getPages());
 
 //        List<EbookResp> ebookRespList = new ArrayList<>();
 //        for (Ebook ebook : ebookList) {
