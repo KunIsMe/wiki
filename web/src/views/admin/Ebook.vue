@@ -16,7 +16,7 @@
           </template>
           <template v-slot:action="{ text, record }">
             <a-space size="small">
-              <a-button type="primary">
+              <a-button type="primary" @click="edit">
                 编辑
               </a-button>
               <a-button type="danger">
@@ -27,6 +27,13 @@
         </a-table>
       </a-layout-content>
   </a-layout>
+  <a-modal
+   title="电子书表单"
+   v-model:visible="modalVisible"
+   :confirm-loading="modalLoading"
+   @ok="handleModalOk">
+    <p>电子书</p>
+  </a-modal>
 </template>
 
 <script lang="ts">
@@ -43,6 +50,9 @@ export default defineComponent({
       total: 0
     });
     const loading = ref(false);
+
+    const modalVisible = ref(false);
+    const modalLoading = ref(false);
 
     const columns = [
       {
@@ -121,14 +131,28 @@ export default defineComponent({
       });
     };
 
+    // 显示编辑电子书信息页面
+    const edit = () => {
+      modalVisible.value = true;
+    };
+
+    // 退出/提交 编辑
+    const handleModalOk = () => {
+      modalLoading.value = true;
+      setTimeout(() => {
+        modalLoading.value = false;
+        modalVisible.value = false;
+      }, 2000);
+    };
+
     onMounted(() => {
       handleQuery({
         page: 1,
         size: pagination.value.pageSize
       });
-    })
+    });
 
-    return { ebooks, columns, pagination, loading, handleTableChange }
+    return { ebooks, columns, pagination, loading, modalVisible, modalLoading, handleTableChange, handleModalOk, edit }
   }
 })
 </script>
