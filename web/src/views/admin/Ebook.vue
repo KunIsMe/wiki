@@ -16,7 +16,7 @@
           </template>
           <template v-slot:action="{ text, record }">
             <a-space size="small">
-              <a-button type="primary" @click="edit">
+              <a-button type="primary" @click="edit(record)">
                 编辑
               </a-button>
               <a-button type="danger">
@@ -32,7 +32,23 @@
    v-model:visible="modalVisible"
    :confirm-loading="modalLoading"
    @ok="handleModalOk">
-    <p>电子书</p>
+    <a-form :model="ebook" :label-col="{ span: 3 }" :wrapper-col="wrapperCol">
+      <a-form-item label="封面">
+        <a-input v-model:value="ebook.cover" />
+      </a-form-item>
+      <a-form-item label="名称">
+        <a-input v-model:value="ebook.name" />
+      </a-form-item>
+      <a-form-item label="分类一">
+        <a-input v-model:value="ebook.category1Id" />
+      </a-form-item>
+      <a-form-item label="分类二">
+        <a-input v-model:value="ebook.category2Id" />
+      </a-form-item>
+      <a-form-item label="描述">
+        <a-input v-model:value="ebook.desc" />
+      </a-form-item>
+    </a-form>
   </a-modal>
 </template>
 
@@ -53,6 +69,7 @@ export default defineComponent({
 
     const modalVisible = ref(false);
     const modalLoading = ref(false);
+    const ebook = ref({});
 
     const columns = [
       {
@@ -132,7 +149,8 @@ export default defineComponent({
     };
 
     // 显示编辑电子书信息页面
-    const edit = () => {
+    const edit = (record: any) => {
+      ebook.value = record;
       modalVisible.value = true;
     };
 
@@ -152,7 +170,7 @@ export default defineComponent({
       });
     });
 
-    return { ebooks, columns, pagination, loading, modalVisible, modalLoading, handleTableChange, handleModalOk, edit }
+    return { ebooks, ebook, columns, pagination, loading, modalVisible, modalLoading, handleTableChange, handleModalOk, edit }
   }
 })
 </script>
