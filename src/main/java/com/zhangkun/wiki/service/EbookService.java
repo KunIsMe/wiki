@@ -7,6 +7,7 @@ import com.zhangkun.wiki.domain.EbookExample;
 import com.zhangkun.wiki.mapper.EbookMapper;
 import com.zhangkun.wiki.req.EbookReq;
 import com.zhangkun.wiki.resp.EbookResp;
+import com.zhangkun.wiki.resp.PageResp;
 import com.zhangkun.wiki.util.CopyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,13 @@ public class EbookService {
     @Autowired
     private EbookMapper ebookMapper;
 
-    public List<EbookResp> list(EbookReq req) {
+    public PageResp<EbookResp> list(EbookReq req) {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if(!ObjectUtils.isEmpty(req.getName())) {
             criteria.andNameLike("%" + req.getName() + "%");
         }
-        PageHelper.startPage(1, 3);
+        PageHelper.startPage(req.getPage(), req.getSize());
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
 
         PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
@@ -46,6 +47,10 @@ public class EbookService {
         // 列表复制
         List<EbookResp> ebookRespList = CopyUtil.copyList(ebookList, EbookResp.class);
 
-        return ebookRespList;
+        PageResp<EbookResp> pageResp = new PageResp<>();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(ebookRespList);
+
+        return pageResp;
     }
 }
