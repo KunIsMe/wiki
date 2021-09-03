@@ -3,6 +3,11 @@
       <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
       >
+        <p>
+          <a-button type="primary" size="large" @click="add">
+            新增
+          </a-button>
+        </p>
         <a-table
          :columns="columns"
          :row-key="record => record.id"
@@ -148,13 +153,19 @@ export default defineComponent({
       });
     };
 
-    // 显示编辑电子书信息页面
+    // 编辑页面显示
     const edit = (record: any) => {
       ebook.value = record;
       modalVisible.value = true;
     };
 
-    // 提交 编辑
+    // 新增页面显示
+    const add = () => {
+      ebook.value = {};
+      modalVisible.value = true;
+    };
+
+    // 提交 编辑/新增
     const handleModalOk = () => {
       modalLoading.value = true;
       axios.post("/ebook/save", ebook.value).then((response) => {
@@ -179,7 +190,7 @@ export default defineComponent({
       });
     });
 
-    return { ebooks, ebook, columns, pagination, loading, modalVisible, modalLoading, handleTableChange, handleModalOk, edit }
+    return { ebooks, ebook, columns, pagination, loading, modalVisible, modalLoading, handleTableChange, handleModalOk, edit, add }
   }
 })
 </script>

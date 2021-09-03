@@ -10,6 +10,7 @@ import com.zhangkun.wiki.req.EbookSaveReq;
 import com.zhangkun.wiki.resp.EbookQueryResp;
 import com.zhangkun.wiki.resp.PageResp;
 import com.zhangkun.wiki.util.CopyUtil;
+import com.zhangkun.wiki.util.SnowFlake;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -21,6 +22,9 @@ public class EbookService {
 
     @Autowired
     private EbookMapper ebookMapper;
+
+    @Autowired
+    private SnowFlake snowFlake;
 
     /**
      * 电子书列表请求
@@ -68,6 +72,10 @@ public class EbookService {
         Ebook ebook = CopyUtil.copy(req, Ebook.class);
         if(ObjectUtils.isEmpty(req.getId())){
             // 新增电子书
+            ebook.setId(snowFlake.nextId());
+            ebook.setDocCount(0);
+            ebook.setViewCount(0);
+            ebook.setVoteCount(0);
             ebookMapper.insert(ebook);
         } else {
             // 编辑电子书

@@ -1,6 +1,10 @@
 package com.zhangkun.wiki.resp;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 public class EbookQueryResp {
+    @JsonSerialize(using = ToStringSerializer.class) //将 Long 类型转成 String 类型给前端
     private Long id;
 
     private String name;
