@@ -46,7 +46,7 @@
         <a-input v-model:value="ebook.category2Id" />
       </a-form-item>
       <a-form-item label="描述">
-        <a-input v-model:value="ebook.desc" />
+        <a-input v-model:value="ebook.description" />
       </a-form-item>
     </a-form>
   </a-modal>
@@ -154,13 +154,22 @@ export default defineComponent({
       modalVisible.value = true;
     };
 
-    // 退出/提交 编辑
+    // 提交 编辑
     const handleModalOk = () => {
       modalLoading.value = true;
-      setTimeout(() => {
-        modalLoading.value = false;
-        modalVisible.value = false;
-      }, 2000);
+      axios.post("/ebook/save", ebook.value).then((response) => {
+        const data = response.data;
+        if(data.success){
+          modalLoading.value = false;
+          modalVisible.value = false;
+
+          // 重新加载列表
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize
+          });
+        }
+      })
     };
 
     onMounted(() => {

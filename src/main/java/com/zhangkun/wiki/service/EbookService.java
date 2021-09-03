@@ -5,8 +5,9 @@ import com.github.pagehelper.PageInfo;
 import com.zhangkun.wiki.domain.Ebook;
 import com.zhangkun.wiki.domain.EbookExample;
 import com.zhangkun.wiki.mapper.EbookMapper;
-import com.zhangkun.wiki.req.EbookReq;
-import com.zhangkun.wiki.resp.EbookResp;
+import com.zhangkun.wiki.req.EbookQueryReq;
+import com.zhangkun.wiki.req.EbookSaveReq;
+import com.zhangkun.wiki.resp.EbookQueryResp;
 import com.zhangkun.wiki.resp.PageResp;
 import com.zhangkun.wiki.util.CopyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,12 @@ public class EbookService {
     @Autowired
     private EbookMapper ebookMapper;
 
-    public PageResp<EbookResp> list(EbookReq req) {
+    /**
+     * 电子书列表请求
+     * @param req
+     * @return
+     */
+    public PageResp<EbookQueryResp> list(EbookQueryReq req) {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if(!ObjectUtils.isEmpty(req.getName())) {
@@ -45,12 +51,27 @@ public class EbookService {
 //        }
 
         // 列表复制
-        List<EbookResp> ebookRespList = CopyUtil.copyList(ebookList, EbookResp.class);
+        List<EbookQueryResp> ebookRespList = CopyUtil.copyList(ebookList, EbookQueryResp.class);
 
-        PageResp<EbookResp> pageResp = new PageResp<>();
+        PageResp<EbookQueryResp> pageResp = new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(ebookRespList);
 
         return pageResp;
+    }
+
+    /**
+     * 电子书编辑或增加
+     * @param req
+     */
+    public void save(EbookSaveReq req) {
+        Ebook ebook = CopyUtil.copy(req, Ebook.class);
+        if(ObjectUtils.isEmpty(req.getId())){
+            // 新增电子书
+            ebookMapper.insert(ebook);
+        } else {
+            // 编辑电子书
+            ebookMapper.updateByPrimaryKey(ebook);
+        }
     }
 }
