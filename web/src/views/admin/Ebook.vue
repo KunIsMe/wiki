@@ -3,11 +3,17 @@
       <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
       >
-        <p>
-          <a-button type="primary" size="large" @click="add">
+        <div class="ebooksSerch">
+          <a-input-search
+            v-model:value="param.name"
+            placeholder="名称"
+            enter-button
+            @search="handleQuery({page: 1, size: pagination.pageSize})"
+          />
+          <a-button type="primary" @click="add">
             新增
           </a-button>
-        </p>
+        </div>
         <a-table
          :columns="columns"
          :row-key="record => record.id"
@@ -84,6 +90,9 @@ export default defineComponent({
     const modalLoading = ref(false);
     const ebook = ref({});
 
+    const param = ref();
+    param.value = {};
+
     const columns = [
       {
         title: '封面',
@@ -137,7 +146,8 @@ export default defineComponent({
       axios.get("/ebook/list", {
          params: {
            page: params.page,
-           size: params.size
+           size: params.size,
+           name: param.value.name
          }
         }).then((response) => {
         loading.value = false;
@@ -218,7 +228,7 @@ export default defineComponent({
       });
     });
 
-    return { ebooks, ebook, columns, pagination, loading, modalVisible, modalLoading, handleTableChange, handleModalOk, handleDelete, edit, add }
+    return { ebooks, ebook, columns, pagination, loading, modalVisible, modalLoading, param, handleQuery, handleTableChange, handleModalOk, handleDelete, edit, add }
   }
 })
 </script>
@@ -227,5 +237,13 @@ export default defineComponent({
   img {
     width: 50px;
     height: 50px;
+  }
+  .ebooksSerch {
+    width: 380px;
+    margin-bottom: 24px;
+  }
+  .ant-input-search {
+    width: 70%;
+    margin-right: 20px;
   }
 </style>
