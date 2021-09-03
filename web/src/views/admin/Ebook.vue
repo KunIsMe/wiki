@@ -74,6 +74,7 @@
 import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { message } from 'ant-design-vue';
+import { Tool } from '@/util/tool';
 
 export default defineComponent({
   name: 'Ebook',
@@ -177,7 +178,7 @@ export default defineComponent({
 
     // 编辑页面显示
     const edit = (record: any) => {
-      ebook.value = record;
+      ebook.value = Tool.copy(record);
       modalVisible.value = true;
     };
 
