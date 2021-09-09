@@ -1,6 +1,6 @@
 package com.zhangkun.wiki.req;
 
-public class CategoryQueryReq extends PageReq {
+public class CategoryQueryReq {
 
     private Long id;
 
