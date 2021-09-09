@@ -17,7 +17,7 @@
         <a-table
          :columns="columns"
          :row-key="record => record.id"
-         :data-source="categorys"
+         :data-source="level1"
          :pagination="false"
          :loading="loading"
         >
@@ -82,6 +82,9 @@ export default defineComponent({
     const param = ref();
     param.value = {};
 
+    // 分类树定义
+    const level1 = ref();
+
     const columns = [
       {
         title: '名称',
@@ -120,6 +123,8 @@ export default defineComponent({
         const data = response.data;
         if(data.success) {
           categorys.value = data.content;
+          level1.value = [];
+          level1.value = Tool.array2Tree(categorys.value, 0);
         } else {
           message.error(data.message);
         }
@@ -170,7 +175,7 @@ export default defineComponent({
       handleQuery();
     });
 
-    return { categorys, category, columns, loading, modalVisible, modalLoading, param, handleQuery, handleModalOk, handleDelete, edit, add }
+    return { level1, category, columns, loading, modalVisible, modalLoading, param, handleQuery, handleModalOk, handleDelete, edit, add }
   }
 })
 </script>
