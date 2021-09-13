@@ -9,8 +9,10 @@ public class EbookQueryResp {
 
     private String name;
 
+    @JsonSerialize(using = ToStringSerializer.class) //将 Long 类型转成 String 类型给前端
     private Long category1Id;
 
+    @JsonSerialize(using = ToStringSerializer.class) //将 Long 类型转成 String 类型给前端
     private Long category2Id;
 
     private String description;
