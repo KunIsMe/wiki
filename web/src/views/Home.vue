@@ -3,45 +3,25 @@
       <a-layout-sider width="200" style="background: #fff">
         <a-menu
           mode="inline"
-          v-model:selectedKeys="selectedKeys2"
-          v-model:openKeys="openKeys"
+          :openKeys="openKeys"
+          v-model:selectedKeys="selectedKeys"
+          @click="handleClick"
           :style="{ height: '100%', borderRight: 0 }"
         >
-          <a-sub-menu key="sub1">
+          <a-menu-item key="welcome">
+            <router-link to="/">
+              <UserOutlined />
+              <span>欢迎</span>
+            </router-link>
+          </a-menu-item>
+          <a-sub-menu v-for="item in level1" :key="item.id">
             <template #title>
-              <span>
-                <user-outlined />
-                subnav 1
-              </span>
+              <span><user-outlined />{{item.name}}</span>
             </template>
-            <a-menu-item key="1">option1</a-menu-item>
-            <a-menu-item key="2">option2</a-menu-item>
-            <a-menu-item key="3">option3</a-menu-item>
-            <a-menu-item key="4">option4</a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="sub2">
-            <template #title>
-              <span>
-                <laptop-outlined />
-                subnav 2
-              </span>
-            </template>
-            <a-menu-item key="5">option5</a-menu-item>
-            <a-menu-item key="6">option6</a-menu-item>
-            <a-menu-item key="7">option7</a-menu-item>
-            <a-menu-item key="8">option8</a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="sub3">
-            <template #title>
-              <span>
-                <notification-outlined />
-                subnav 3
-              </span>
-            </template>
-            <a-menu-item key="9">option9</a-menu-item>
-            <a-menu-item key="10">option10</a-menu-item>
-            <a-menu-item key="11">option11</a-menu-item>
-            <a-menu-item key="12">option12</a-menu-item>
+            <a-menu-item v-for="child in item.children" :key="child.id">
+              <MailOutlined />
+              <span>{{child.name}}</span>
+            </a-menu-item>
           </a-sub-menu>
         </a-menu>
       </a-layout-sider>
@@ -73,6 +53,8 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, reactive, toRefs } from 'vue';
 import axios from 'axios';
+import { message } from 'ant-design-vue';
+import { Tool } from '@/util/tool';
 
 export default defineComponent({
   name: 'Home',
@@ -80,7 +62,23 @@ export default defineComponent({
     const ebooks1 = ref();
     const ebooks2 = reactive({ ebooks: [] });
 
+    const level1 = ref();
+
+    const handleQueryCategory = () => {
+      axios.get("/category/all").then((response) => {
+        const data = response.data;
+        if(data.success) {
+          const categorys = data.content;
+          level1.value = [];
+          level1.value = Tool.array2Tree(categorys, 0);
+        } else {
+          message.error(data.message);
+        }
+      })
+    };
+
     onMounted(() => {
+      handleQueryCategory(),
       axios.get("/ebook/list", {
         params: {
           page: 1,
@@ -91,7 +89,11 @@ export default defineComponent({
         ebooks1.value = data.content.list;
         ebooks2.ebooks = data.content.list;
       })
-    })
+    });
+
+    const handleClick = () => {
+      alert("1");
+    }
 
     const actions: Record<string, string>[] = [
       { type: 'StarOutlined', text: '156' },
@@ -101,7 +103,7 @@ export default defineComponent({
 
     const { ebooks } = toRefs(ebooks2);
 
-    return { ebooks1, ebooks, actions }
+    return { ebooks1, ebooks, actions, level1, handleClick }
   }
 });
 </script>
