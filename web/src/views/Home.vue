@@ -28,7 +28,10 @@
       <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
       >
-        <a-list item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks1">
+        <div class="welcome" v-show="isShowWelcome">
+          <h1>欢迎使用 wiki 知识库</h1>
+        </div>
+        <a-list item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks1" v-show="!isShowWelcome">
           <template #renderItem="{ item }">
             <a-list-item key="item.name">
               <template #actions>
@@ -64,6 +67,8 @@ export default defineComponent({
 
     const level1 = ref();
 
+    const isShowWelcome = ref(true);
+
     const handleQueryCategory = () => {
       axios.get("/category/all").then((response) => {
         const data = response.data;
@@ -91,8 +96,12 @@ export default defineComponent({
       })
     });
 
-    const handleClick = () => {
-      alert("1");
+    const handleClick = (value: any) => {
+      if (value.key === 'welcome') {
+        isShowWelcome.value = true;
+      } else {
+        isShowWelcome.value = false;
+      }
     }
 
     const actions: Record<string, string>[] = [
@@ -103,7 +112,7 @@ export default defineComponent({
 
     const { ebooks } = toRefs(ebooks2);
 
-    return { ebooks1, ebooks, actions, level1, handleClick }
+    return { ebooks1, ebooks, actions, level1, isShowWelcome, handleClick }
   }
 });
 </script>
