@@ -25,6 +25,9 @@
           <template #cover="{ text: cover }">
             <img v-if="cover" :src="cover" alt="avatar" />
           </template>
+          <template v-slot:category="{ text, record }">
+            <span>{{ getCategoryName(record.category1Id) }} / {{ getCategoryName(record.category2Id) }}</span>
+          </template>
           <template v-slot:action="{ text, record }">
             <a-space size="small">
               <a-button type="primary" @click="edit(record)">
@@ -113,14 +116,8 @@ export default defineComponent({
         key: 'name'
       },
       {
-        title: '分类一',
-        key: 'category1Id',
-        dataIndex: 'category1Id'
-      },
-      {
-        title: '分类二',
-        dataIndex: 'category2Id',
-        key: 'category2Id'
+        title: '分类',
+        slots: { customRender: 'category' }
       },
       {
         title: '文档数',
@@ -232,6 +229,7 @@ export default defineComponent({
       })
     };
 
+    let categorys: any;
     // 级联分类操作
     const handleQueryCategory = () => {
       loading.value = true;
@@ -243,7 +241,7 @@ export default defineComponent({
         loading.value = false;
         const data = response.data;
         if(data.success) {
-          const categorys = data.content;
+          categorys = data.content;
           level1.value = [];
           level1.value = Tool.array2Tree(categorys, 0);
         } else {
@@ -251,6 +249,16 @@ export default defineComponent({
         }
       })
     };
+
+    const getCategoryName = (cid: number) => {
+      let result = "";
+      categorys.forEach((item: any) => {
+        if (item.id == cid) {
+          result = item.name;
+        }
+      });
+      return result;
+    }
 
     onMounted(() => {
       handleQuery({
@@ -260,7 +268,7 @@ export default defineComponent({
       handleQueryCategory();
     });
 
-    return { ebooks, ebook, columns, pagination, loading, modalVisible, modalLoading, param, categoryIds, level1, handleQuery, handleTableChange, handleModalOk, handleDelete, edit, add }
+    return { ebooks, ebook, columns, pagination, loading, modalVisible, modalLoading, param, categoryIds, level1, handleQuery, handleTableChange, handleModalOk, handleDelete, edit, add, getCategoryName }
   }
 })
 </script>
