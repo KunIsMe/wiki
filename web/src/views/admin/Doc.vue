@@ -17,12 +17,14 @@
               </a-button>
             </div>
             <a-table
+            v-if="level1.length > 0"
             :columns="columns"
             :row-key="record => record.id"
             :data-source="level1"
             :pagination="false"
             :loading="loading"
             size="small"
+            :defaultExpandAllRows="true"
             >
               <template #name="{ text, record }">
                 {{record.sort}} {{text}}
@@ -116,6 +118,7 @@ export default defineComponent({
 
     // 文档树定义
     const level1 = ref();
+    level1.value = [];
 
     // 树形选择组件内容
     const treeSelectData = ref();
