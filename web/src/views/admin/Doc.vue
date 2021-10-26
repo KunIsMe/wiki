@@ -30,7 +30,7 @@
                 编辑
               </a-button>
               <a-popconfirm
-                title="删除后不可恢复，确认删除？"
+                title="本文档连同子文档一起删除并不可恢复，确认删除？"
                 ok-text="是"
                 cancel-text="否"
                 @confirm="handleDelete(record.id)"
@@ -68,6 +68,9 @@
       <a-form-item label="顺序">
         <a-input v-model:value="doc.sort" />
       </a-form-item>
+      <a-form-item label="内容">
+        <div id="content"></div>
+      </a-form-item>
     </a-form>
   </a-modal>
 </template>
@@ -77,6 +80,7 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { message } from 'ant-design-vue';
+import E from 'wangeditor';
 import { Tool } from '@/util/tool';
 
 export default defineComponent({
@@ -212,6 +216,12 @@ export default defineComponent({
       treeSelectData.value.unshift({id: 0, name: '无'});
 
       modalVisible.value = true;
+
+      // 创建富文本编辑器
+      setTimeout(() => {
+        const editor = new E('#content');
+        editor.create();
+      },100);
     };
 
     // 新增页面显示
@@ -224,6 +234,12 @@ export default defineComponent({
       treeSelectData.value.unshift({id: 0, name: '无'});
 
       modalVisible.value = true;
+
+      // 创建富文本编辑器
+      setTimeout(() => {
+        const editor = new E('#content');
+        editor.create();
+      },100);
     };
 
     // 文档删除
