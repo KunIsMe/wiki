@@ -7595,11 +7595,6 @@
   "resolved" "https://registry.nlark.com/tslib/download/tslib-1.14.1.tgz"
   "version" "1.14.1"
 
-"tslib@^2.1.0":
-  "integrity" "sha1-6KM1rdXOrlGqJh0ypJAVjvBC7wE="
-  "resolved" "https://registry.nlark.com/tslib/download/tslib-2.3.1.tgz"
-  "version" "2.3.1"
-
 "tslint@^5.20.1":
   "integrity" "sha512-EcMxhzCFt8k+/UP5r8waCf/lzmeSyVlqxqMEDQE7rWYiQky8KpIBz1JAoYXfROHrPZ1XXd43q8yQnULOLiBRQg== sha1-5AHortoBUrxE3QfmFANPP4DGe30="
   "resolved" "https://registry.nlark.com/tslint/download/tslint-5.20.1.tgz"
@@ -8003,14 +7998,13 @@
   dependencies:
     "@vue/devtools-api" "^6.0.0-beta.11"
 
-"wangeditor@^4.7.9":
-  "integrity" "sha1-wJIsAzdznVCoMQ/Kwwt6bOI4tQ0="
-  "resolved" "https://registry.npmmirror.com/wangeditor/download/wangeditor-4.7.9.tgz"
-  "version" "4.7.9"
+"wangeditor@^4.6.3":
+  "integrity" "sha1-zFcpEbIOMY/KglSvD+Nu/EBkK9w="
+  "resolved" "https://registry.npmmirror.com/wangeditor/download/wangeditor-4.6.3.tgz"
+  "version" "4.6.3"
   dependencies:
     "@babel/runtime" "^7.11.2"
     "@babel/runtime-corejs3" "^7.11.2"
-    "tslib" "^2.1.0"
 
 "warning@^4.0.0":
   "integrity" "sha1-Fungd+uKhtavfWSqHgX9hbRnjKM="

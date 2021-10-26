@@ -1,7 +1,10 @@
 package com.zhangkun.wiki.service;
 
+import com.zhangkun.wiki.domain.Content;
+import com.zhangkun.wiki.domain.ContentExample;
 import com.zhangkun.wiki.domain.Doc;
 import com.zhangkun.wiki.domain.DocExample;
+import com.zhangkun.wiki.mapper.ContentMapper;
 import com.zhangkun.wiki.mapper.DocMapper;
 import com.zhangkun.wiki.req.DocQueryReq;
 import com.zhangkun.wiki.req.DocSaveReq;
@@ -19,6 +22,9 @@ public class DocService {
 
     @Autowired
     private DocMapper docMapper;
+
+    @Autowired
+    private ContentMapper contentMapper;
 
     @Autowired
     private SnowFlake snowFlake;
@@ -49,13 +55,22 @@ public class DocService {
      */
     public void save(DocSaveReq req) {
         Doc doc = CopyUtil.copy(req, Doc.class);
+        Content content = CopyUtil.copy(req, Content.class);
         if(ObjectUtils.isEmpty(req.getId())){
             // 新增电子书
             doc.setId(snowFlake.nextId());
             docMapper.insert(doc);
+
+            content.setId(doc.getId());
+            contentMapper.insert(content);
         } else {
             // 编辑电子书
             docMapper.updateByPrimaryKey(doc);
+
+            int count = contentMapper.updateByPrimaryKeyWithBLOBs(content);
+            if (count == 0) {
+                contentMapper.insert(content);
+            }
         }
     }
 
@@ -72,6 +87,11 @@ public class DocService {
         DocExample.Criteria criteria = docExample.createCriteria();
         criteria.andIdIn(ids);
 
+        ContentExample contentExample = new ContentExample();
+        ContentExample.Criteria criteriaContent = contentExample.createCriteria();
+        criteriaContent.andIdIn(ids);
+
         docMapper.deleteByExample(docExample);
+        contentMapper.deleteByExample(contentExample);
     }
 }

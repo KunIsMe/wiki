@@ -111,10 +111,15 @@ export default defineComponent({
 
     const modalVisible = ref(false);
     const modalLoading = ref(false);
-    const doc = ref({});
+    const doc = ref();
+    doc.value = {};
 
     const param = ref();
     param.value = {};
+
+    // 实例化富文本编辑器
+    let editor = new E('#content');
+    editor.config.zIndex = 0;
 
     // 文档树定义
     const level1 = ref();
@@ -256,6 +261,7 @@ export default defineComponent({
     // 确认提交 编辑/新增
     const handleSave = () => {
       modalLoading.value = true;
+      doc.value.content = editor.txt.html();
       axios.post("/doc/save", doc.value).then((response) => {
         modalLoading.value = false;
         const data = response.data;
@@ -273,8 +279,6 @@ export default defineComponent({
     onMounted(() => {
       handleQuery();
 
-      const editor = new E('#content');
-      editor.config.zIndex = 0;
       editor.create();
     });
 
