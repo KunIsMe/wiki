@@ -13,6 +13,7 @@
                     </a-tree>
                 </a-col>
                 <a-col :span="18">
+                    <div :innerHTML="html"></div>
                 </a-col>
             </a-row>
         </a-layout-content>
@@ -33,6 +34,7 @@ export default defineComponent({
         const docs = ref();
         const level1 = ref();
         level1.value = [];
+        const html = ref();
 
         /**
          * 数据查询
@@ -50,11 +52,33 @@ export default defineComponent({
             })
         };
 
+        /**
+         * 内容查询
+         */
+        const handleQueryContent = (id: number) => {
+            axios.get("/doc/find-content/" + id).then((response) => {
+                const data = response.data;
+                if(data.success) {
+                    html.value = data.content;
+                } else {
+                    message.error(data.message);
+                }
+            })
+        };
+
+        const onSelect = (selectedKeys: any, info: any) => {
+            // console.log('selected', selectedKeys, info);
+            if (Tool.isNotEmpty(selectedKeys)) {
+                // 加载内容
+                handleQueryContent(selectedKeys[0]);
+            }
+        };
+
         onMounted(() => {
             handleQuery();
         });
 
-        return { level1 };
+        return { level1, html, onSelect };
     }
 })
 </script>
