@@ -9,6 +9,7 @@
                      @select="onSelect"
                      :replaceFields="{title: 'name', key: 'id', value: 'id'}"
                      :defaultExpandAll="true"
+                     :defaultSelectedKeys="defaultSelectedKeys"
                     >
                     </a-tree>
                 </a-col>
@@ -35,6 +36,22 @@ export default defineComponent({
         const level1 = ref();
         level1.value = [];
         const html = ref();
+        const defaultSelectedKeys = ref();
+        defaultSelectedKeys.value = [];
+
+        /**
+         * 内容查询
+         */
+        const handleQueryContent = (id: number) => {
+            axios.get("/doc/find-content/" + id).then((response) => {
+                const data = response.data;
+                if(data.success) {
+                    html.value = data.content;
+                } else {
+                    message.error(data.message);
+                }
+            })
+        };
 
         /**
          * 数据查询
@@ -46,20 +63,11 @@ export default defineComponent({
                     docs.value = data.content;
                     level1.value = [];
                     level1.value = Tool.array2Tree(docs.value, 0);
-                } else {
-                    message.error(data.message);
-                }
-            })
-        };
 
-        /**
-         * 内容查询
-         */
-        const handleQueryContent = (id: number) => {
-            axios.get("/doc/find-content/" + id).then((response) => {
-                const data = response.data;
-                if(data.success) {
-                    html.value = data.content;
+                    if(Tool.isNotEmpty(level1)) {
+                        defaultSelectedKeys.value = [level1.value[0].id];
+                        handleQueryContent(level1.value[0].id);
+                    }
                 } else {
                     message.error(data.message);
                 }
@@ -78,7 +86,7 @@ export default defineComponent({
             handleQuery();
         });
 
-        return { level1, html, onSelect };
+        return { level1, html, defaultSelectedKeys, onSelect };
     }
 })
 </script>
