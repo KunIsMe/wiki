@@ -1,9 +1,8 @@
 package com.zhangkun.wiki.controller;
 
-import com.zhangkun.wiki.req.DocQueryReq;
 import com.zhangkun.wiki.req.DocSaveReq;
-import com.zhangkun.wiki.resp.DocQueryResp;
 import com.zhangkun.wiki.resp.CommonResp;
+import com.zhangkun.wiki.resp.DocQueryResp;
 import com.zhangkun.wiki.service.DocService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +18,10 @@ public class DocController {
     @Autowired
     private DocService docService;
 
-    @GetMapping("/all")
-    public CommonResp all(DocQueryReq req) {
+    @GetMapping("/all/{ebookId}")
+    public CommonResp all(@PathVariable Long ebookId) {
         CommonResp<List<DocQueryResp>> resp = new CommonResp<>();
-        List<DocQueryResp> list = docService.all(req);
+        List<DocQueryResp> list = docService.all(ebookId);
         resp.setContent(list);
         return resp;
     }

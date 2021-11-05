@@ -6,7 +6,6 @@ import com.zhangkun.wiki.domain.Doc;
 import com.zhangkun.wiki.domain.DocExample;
 import com.zhangkun.wiki.mapper.ContentMapper;
 import com.zhangkun.wiki.mapper.DocMapper;
-import com.zhangkun.wiki.req.DocQueryReq;
 import com.zhangkun.wiki.req.DocSaveReq;
 import com.zhangkun.wiki.resp.DocQueryResp;
 import com.zhangkun.wiki.util.CopyUtil;
@@ -34,13 +33,10 @@ public class DocService {
      * @param req
      * @return
      */
-    public List<DocQueryResp> all(DocQueryReq req) {
+    public List<DocQueryResp> all(Long ebookId) {
         DocExample docExample = new DocExample();
+        docExample.createCriteria().andEbookIdEqualTo(ebookId);
         docExample.setOrderByClause("sort asc");
-        DocExample.Criteria criteria = docExample.createCriteria();
-        if(!ObjectUtils.isEmpty(req.getName())) {
-            criteria.andNameLike("%" + req.getName() + "%");
-        }
         List<Doc> docList = docMapper.selectByExample(docExample);
 
         // 列表复制
