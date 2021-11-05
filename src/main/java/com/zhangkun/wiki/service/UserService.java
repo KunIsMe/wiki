@@ -75,7 +75,8 @@ public class UserService {
             }
         } else {
             // 编辑用户
-            userMapper.updateByPrimaryKey(user);
+            user.setLoginName(null);
+            userMapper.updateByPrimaryKeySelective(user);
         }
     }
 
