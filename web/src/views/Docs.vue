@@ -83,7 +83,7 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style>
 /* wangeditor默认样式 */
 /* table 样式 */
 .wangeditor table {
