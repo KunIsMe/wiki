@@ -6,7 +6,7 @@
         <div class="usersSerch">
           <a-input-search
             v-model:value="param.loginName"
-            placeholder="登陆名"
+            placeholder="登录名"
             enter-button
             @search="handleQuery({page: 1, size: pagination.pageSize})"
           />
@@ -54,7 +54,7 @@
    :confirm-loading="modalLoading"
    @ok="handleModalOk">
     <a-form :model="user" :label-col="{ span: 3 }" :wrapper-col="{ span: 18 }">
-      <a-form-item label="登陆名">
+      <a-form-item label="登录名">
         <a-input v-model:value="user.loginName" :disabled="!!user.id"/>
       </a-form-item>
       <a-form-item label="昵称">
@@ -98,7 +98,7 @@ export default defineComponent({
 
     const columns = [
         {
-          title: '登陆名',
+          title: '登录名',
           dataIndex: 'loginName'
         },
         {
