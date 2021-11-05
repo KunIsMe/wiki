@@ -30,7 +30,7 @@ public class DocService {
 
     /**
      * 文档列表请求（不分页）
-     * @param req
+     * @param
      * @return
      */
     public List<DocQueryResp> all(Long ebookId) {
@@ -93,6 +93,10 @@ public class DocService {
 
     public String findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
-        return content.getContent();
+        if(ObjectUtils.isEmpty(content)){
+            return "";
+        } else {
+            return content.getContent();
+        }
     }
 }
