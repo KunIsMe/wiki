@@ -78,11 +78,21 @@
                 <a-input v-model:value="doc.sort" placeholder="顺序" />
               </a-form-item>
               <a-form-item>
+                <a-button type="primary" @click="handlePreviewContent()">
+                  <EyeOutlined /> 内容预览
+                </a-button>
+              </a-form-item>
+              <a-form-item>
                 <div id="content"></div>
               </a-form-item>
             </a-form>
           </a-col>
         </a-row>
+        
+        <a-drawer width="1100" placement="right" :closable="false" :visible="drawerVisible" @close="onDrawerClose">
+          <div class="wangeditor" :innerHTML="previewHtml"></div>
+        </a-drawer>
+
       </a-layout-content>
   </a-layout>
   <!-- <a-modal
@@ -302,18 +312,30 @@ export default defineComponent({
       })
     };
 
+    // 富文本预览
+    const drawerVisible = ref(false);
+    const previewHtml = ref();
+    const handlePreviewContent = () => {
+      const html = editor.txt.html();
+      previewHtml.value = html;
+      drawerVisible.value = true;
+    }
+    const onDrawerClose = () => {
+      drawerVisible.value = false;
+    }
+
     onMounted(() => {
       handleQuery();
 
       editor.create();
     });
 
-    return { level1, doc, columns, loading, modalVisible, modalLoading, param,  treeSelectData, handleQuery, handleSave, handleDelete, edit, add }
+    return { level1, doc, columns, loading, modalVisible, modalLoading, param,  treeSelectData, drawerVisible, previewHtml, handleQuery, handleSave, handleDelete, edit, add, handlePreviewContent, onDrawerClose }
   }
 })
 </script>
 
-<style scoped>
+<style>
   img {
     width: 50px;
     height: 50px;
@@ -325,5 +347,60 @@ export default defineComponent({
   .ant-input-search {
     width: 70%;
     margin-right: 20px;
+  }
+
+  /* wangeditor默认样式 */
+  /* table 样式 */
+  .wangeditor table {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+  }
+  .wangeditor table td,
+  .wangeditor table th {
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 3px 5px;
+  }
+  .wangeditor table th {
+    border-bottom: 2px solid #ccc;
+    text-align: center;
+  }
+
+  /* blockquote 样式 */
+  .wangeditor blockquote {
+    display: block;
+    border-left: 8px solid #d0e5f2;
+    padding: 5px 10px;
+    margin: 10px 0;
+    line-height: 1.4;
+    font-size: 100%;
+    background-color: #f1f1f1;
+  }
+
+  /* code 样式 */
+  .wangeditor code {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    background-color: #f1f1f1;
+    border-radius: 3px;
+    padding: 3px 5px;
+    margin: 0 3px;
+  }
+  .wangeditor pre code {
+    display: block;
+  }
+
+  /* ul ol 样式 */
+  .wangeditor ul, ol {
+    margin: 10px 0 10px 20px;
+  }
+
+  /* 和antdv p冲突，覆盖掉 */
+  .wangeditor blockquote p {
+      font-family: "YouYuan";
+      margin: 20px 10px !important;
+      font-size: 16px !important;
+      font-weight: 600;
   }
 </style>
