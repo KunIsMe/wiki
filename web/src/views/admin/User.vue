@@ -73,6 +73,9 @@ import axios from 'axios';
 import { message } from 'ant-design-vue';
 import { Tool } from '@/util/tool';
 
+declare let hexMd5: any;
+declare let KEY: any;
+
 export default defineComponent({
   name: 'User',
   setup () {
@@ -184,8 +187,10 @@ export default defineComponent({
     // 确认提交 编辑/新增
     const handleModalOk = () => {
       modalLoading.value = true;
-      user.value.category1Id = categoryIds.value[0];
-      user.value.category2Id = categoryIds.value[1];
+
+      // md5 加密传输
+      user.value.password = hexMd5(user.value.password + KEY);
+
       axios.post("/user/save", user.value).then((response) => {
         modalLoading.value = false;
         const data = response.data;

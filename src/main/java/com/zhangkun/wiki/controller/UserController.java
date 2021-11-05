@@ -7,6 +7,7 @@ import com.zhangkun.wiki.resp.UserQueryResp;
 import com.zhangkun.wiki.resp.PageResp;
 import com.zhangkun.wiki.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,6 +29,9 @@ public class UserController {
 
     @PostMapping("/save")
     public CommonResp list(@Valid @RequestBody UserSaveReq req) {
+        // md5 加密存储
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+
         CommonResp resp = new CommonResp<>();
         userService.save(req);
         return resp;
