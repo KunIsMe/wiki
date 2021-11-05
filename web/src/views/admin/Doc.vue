@@ -219,9 +219,26 @@ export default defineComponent({
       }
     }
 
+    /**
+     * 内容查询
+     */
+    const handleQueryContent = () => {
+      axios.get("/doc/find-content/" + doc.value.id).then((response) => {
+          const data = response.data;
+          if(data.success) {
+            editor.txt.html(data.content);
+          } else {
+            message.error(data.message);
+          }
+      })
+    };
+
     // 编辑页面显示
     const edit = (record: any) => {
+      // 清空富文本框
+      editor.txt.html("");
       doc.value = Tool.copy(record);
+      handleQueryContent();
 
       // 不能选择当前节点及其所有子孙节点，作为父节点，会使树断开
       treeSelectData.value = Tool.copy(level1.value);
@@ -235,6 +252,8 @@ export default defineComponent({
 
     // 新增页面显示
     const add = () => {
+      // 清空富文本框
+      editor.txt.html("");
       doc.value = {
         ebookId: route.query.ebookId
       };
@@ -254,6 +273,7 @@ export default defineComponent({
           ids = [];
           // 重新加载列表
           handleQuery();
+          add();
         }
       })
     }
@@ -266,7 +286,8 @@ export default defineComponent({
         modalLoading.value = false;
         const data = response.data;
         if(data.success){
-          modalVisible.value = false;
+          // modalVisible.value = false;
+          message.success("保存成功！");
 
           // 重新加载列表
           handleQuery();
