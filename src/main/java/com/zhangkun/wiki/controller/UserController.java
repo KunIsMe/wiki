@@ -82,4 +82,11 @@ public class UserController {
         resp.setContent(userLoginResp);
         return resp;
     }
+
+    @GetMapping("/logout/{token}")
+    public CommonResp delete(@PathVariable String token) {
+        CommonResp resp = new CommonResp<>();
+        redisTemplate.delete(token);
+        return resp;
+    }
 }

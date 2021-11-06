@@ -4,6 +4,16 @@
       <a class="loginMenu" v-show="!user.id" @click="showLoginModal">
         <span>登录</span>
       </a>
+      <a-popconfirm
+        title="确认退出登录？"
+        ok-text="是"
+        cancel-text="否"
+        @confirm="logout"
+      >
+        <a class="loginMenu" v-show="user.id">
+          <span>退出登录</span>
+        </a>
+      </a-popconfirm>
       <a class="loginMenu" v-show="user.id">
         <span style="fontSize:13px;">您好：</span>{{user.name}}
       </a>
@@ -91,7 +101,20 @@ export default defineComponent({
       });
     };
 
-    return { loginUser, loginModalVisible, loginModalLoading, user, showLoginModal, login };
+    const logout = () => {
+      console.log("开始退出登录");
+      axios.get('/user/logout/' + user.value.token).then((response) => {
+        const data = response.data;
+        if (data.success) {
+          store.commit("setUser", {});
+          message.success("退出登录成功！");
+        } else {
+          message.error(data.message);
+        }
+      });
+    };
+
+    return { loginUser, loginModalVisible, loginModalLoading, user, showLoginModal, login, logout };
   }
 });
 </script>
@@ -100,6 +123,7 @@ export default defineComponent({
 .loginMenu {
   float: right;
   color: white;
+  margin-left: 14px;
 }
 a:hover {
   color: lightskyblue;
