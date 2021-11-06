@@ -1,16 +1,18 @@
 package com.zhangkun.wiki.resp;
 
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 public class UserLoginResp {
 
+    @JsonSerialize(using = ToStringSerializer.class) //将 Long 类型转成 String 类型给前端
     private Long id;
 
-    @NotNull(message = "【用户名】不能为空")
     private String loginName;
 
-    @NotNull(message = "【昵称】不能为空")
     private String name;
+
+    private String token;
 
     public Long getId() {
         return id;
@@ -36,12 +38,21 @@ public class UserLoginResp {
         this.name = name;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     @Override
     public String toString() {
         return "UserLoginResp{" +
                 "id=" + id +
                 ", loginName='" + loginName + '\'' +
                 ", name='" + name + '\'' +
+                ", token='" + token + '\'' +
                 '}';
     }
 }
