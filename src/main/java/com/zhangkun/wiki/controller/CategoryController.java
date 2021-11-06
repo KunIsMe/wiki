@@ -35,14 +35,14 @@ public class CategoryController {
 //    }
 
     @PostMapping("/save")
-    public CommonResp list(@Valid @RequestBody CategorySaveReq req) {
+    public CommonResp save(@Valid @RequestBody CategorySaveReq req) {
         CommonResp resp = new CommonResp<>();
         categoryService.save(req);
         return resp;
     }
 
     @DeleteMapping("/delete/{id}")
-    public CommonResp list(@PathVariable Long id) {
+    public CommonResp delete(@PathVariable Long id) {
         CommonResp resp = new CommonResp<>();
         categoryService.delete(id);
         return resp;

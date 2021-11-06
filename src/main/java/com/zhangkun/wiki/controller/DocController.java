@@ -27,14 +27,14 @@ public class DocController {
     }
 
     @PostMapping("/save")
-    public CommonResp list(@Valid @RequestBody DocSaveReq req) {
+    public CommonResp save(@Valid @RequestBody DocSaveReq req) {
         CommonResp resp = new CommonResp<>();
         docService.save(req);
         return resp;
     }
 
     @DeleteMapping("/delete/{idsStr}")
-    public CommonResp list(@PathVariable String idsStr) {
+    public CommonResp delete(@PathVariable String idsStr) {
         CommonResp resp = new CommonResp<>();
         List<String> list = Arrays.asList(idsStr.split(","));
         docService.delete(list);

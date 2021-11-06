@@ -8,6 +8,7 @@ import com.zhangkun.wiki.exception.BusinessException;
 import com.zhangkun.wiki.exception.BusinessExceptionCode;
 import com.zhangkun.wiki.mapper.UserMapper;
 import com.zhangkun.wiki.req.UserQueryReq;
+import com.zhangkun.wiki.req.UserResetPasswordReq;
 import com.zhangkun.wiki.req.UserSaveReq;
 import com.zhangkun.wiki.resp.UserQueryResp;
 import com.zhangkun.wiki.resp.PageResp;
@@ -105,5 +106,14 @@ public class UserService {
         } else {
             return userList.get(0);
         }
+    }
+
+    /**
+     * 重置密码
+     * @param req
+     */
+    public void resetPassword(UserResetPasswordReq req) {
+        User user = CopyUtil.copy(req, User.class);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }

@@ -30,6 +30,9 @@
           </template>
           <template v-slot:action="{ text, record }">
             <a-space size="small">
+              <a-button type="primary" @click="resetPassword(record)">
+                重置密码
+              </a-button>
               <a-button type="primary" @click="edit(record)">
                 编辑
               </a-button>
@@ -65,6 +68,18 @@
       </a-form-item>
     </a-form>
   </a-modal>
+
+  <a-modal
+   title="重置密码"
+   v-model:visible="resetModalVisible"
+   :confirm-loading="resetModalLoading"
+   @ok="handleResetModalOk">
+    <a-form :model="user" :label-col="{ span: 3 }" :wrapper-col="{ span: 18 }">
+      <a-form-item label="新密码">
+        <a-input v-model:value="user.password"/>
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 
 <script lang="ts">
@@ -89,14 +104,16 @@ export default defineComponent({
 
     const modalVisible = ref(false);
     const modalLoading = ref(false);
+
+    const resetModalVisible = ref(false);
+    const resetModalLoading = ref(false);
+
     const user = ref();
     user.value = {};
 
     const param = ref();
     param.value = {};
 
-    // 数组 [100, 101] ，对应：前端开发 / Vue
-    const categoryIds = ref();
     const level1 = ref();
 
     const columns = [
@@ -159,14 +176,12 @@ export default defineComponent({
     // 编辑页面显示
     const edit = (record: any) => {
       user.value = Tool.copy(record);
-      categoryIds.value = [user.value.category1Id, user.value.category2Id];
       modalVisible.value = true;
     };
 
     // 新增页面显示
     const add = () => {
       user.value = {};
-      categoryIds.value = [];
       modalVisible.value = true;
     };
 
@@ -208,6 +223,37 @@ export default defineComponent({
       })
     };
 
+    // 重置密码页面显示
+    const resetPassword = (record: any) => {
+      user.value = Tool.copy(record);
+      user.value.password = null;
+      resetModalVisible.value = true;
+    };
+
+    // 确认提交 重置密码
+    const handleResetModalOk = () => {
+      resetModalLoading.value = true;
+
+      // md5 加密传输
+      user.value.password = hexMd5(user.value.password + KEY);
+
+      axios.post("/user/reset-password", user.value).then((response) => {
+        resetModalLoading.value = false;
+        const data = response.data;
+        if(data.success){
+          resetModalVisible.value = false;
+
+          // 重新加载列表
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize
+          });
+        } else {
+          message.error(data.message);
+        }
+      })
+    };
+
     onMounted(() => {
       handleQuery({
         page: 1,
@@ -215,7 +261,7 @@ export default defineComponent({
       });
     });
 
-    return { users, user, columns, pagination, loading, modalVisible, modalLoading, param, categoryIds, level1, handleQuery, handleTableChange, handleModalOk, handleDelete, edit, add }
+    return { users, user, columns, pagination, loading, modalVisible, modalLoading, param, level1, resetModalVisible, resetModalLoading, handleQuery, handleTableChange, handleModalOk, handleDelete, edit, add, handleResetModalOk, resetPassword }
   }
 })
 </script>
