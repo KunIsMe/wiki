@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import store from '@/store';
 import axios from 'axios';
 import { message } from 'ant-design-vue';
@@ -64,8 +64,8 @@ export default defineComponent({
       loginName: '',
       password: ''
     };
-    const user = ref();
-    user.value = {};
+
+    const user = computed(() => store.state.user);
 
     const loginModalVisible = ref(false);
     const loginModalLoading = ref(false);
@@ -82,8 +82,7 @@ export default defineComponent({
         loginModalLoading.value = false;
         const data = response.data;
         if (data.success) {
-          user.value = data.content;
-          store.commit("setUser", user.value);
+          store.commit("setUser", data.content);
           loginModalVisible.value = false;
           message.success("登录成功！");
         } else {
