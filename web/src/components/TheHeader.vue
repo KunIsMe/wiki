@@ -1,8 +1,11 @@
 <template>
     <a-layout-header class="header">
       <div class="logo" />
-      <a class="loginMenu" @click="showLoginModal">
+      <a class="loginMenu" v-show="!user.id" @click="showLoginModal">
         <span>登录</span>
+      </a>
+      <a class="loginMenu" v-show="user.id">
+        <span>您好：{{user.name}}</span>
       </a>
       <a-menu
         theme="dark"
@@ -60,6 +63,8 @@ export default defineComponent({
       loginName: '',
       password: ''
     };
+    const user = ref();
+    user.value = {};
 
     const loginModalVisible = ref(false);
     const loginModalLoading = ref(false);
@@ -76,6 +81,7 @@ export default defineComponent({
         loginModalLoading.value = false;
         const data = response.data;
         if (data.success) {
+          user.value = data.content;
           loginModalVisible.value = false;
           message.success("登录成功！");
         } else {
@@ -84,7 +90,7 @@ export default defineComponent({
       });
     };
 
-    return { loginUser, loginModalVisible, loginModalLoading, showLoginModal, login };
+    return { loginUser, loginModalVisible, loginModalLoading, user, showLoginModal, login };
   }
 });
 </script>
@@ -93,5 +99,8 @@ export default defineComponent({
 .loginMenu {
   float: right;
   color: white;
+}
+a:hover {
+  color: lightskyblue;
 }
 </style>
