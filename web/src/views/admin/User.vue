@@ -201,26 +201,30 @@ export default defineComponent({
 
     // 确认提交 编辑/新增
     const handleModalOk = () => {
-      modalLoading.value = true;
+      if(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,32}$/.test(user.value.password)) {
+        modalLoading.value = true;
 
-      // md5 加密传输
-      user.value.password = hexMd5(user.value.password + KEY);
+        // md5 加密传输
+        user.value.password = hexMd5(user.value.password + KEY);
 
-      axios.post("/user/save", user.value).then((response) => {
-        modalLoading.value = false;
-        const data = response.data;
-        if(data.success){
-          modalVisible.value = false;
+        axios.post("/user/save", user.value).then((response) => {
+          modalLoading.value = false;
+          const data = response.data;
+          if(data.success){
+            modalVisible.value = false;
 
-          // 重新加载列表
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize
-          });
-        } else {
-          message.error(data.message);
-        }
-      })
+            // 重新加载列表
+            handleQuery({
+              page: pagination.value.current,
+              size: pagination.value.pageSize
+            });
+          } else {
+            message.error(data.message);
+          }
+        })
+      } else {
+        message.error("【密码】至少包含 数字和英文，长度为6~32");
+      }
     };
 
     // 重置密码页面显示
@@ -232,26 +236,29 @@ export default defineComponent({
 
     // 确认提交 重置密码
     const handleResetModalOk = () => {
-      resetModalLoading.value = true;
+      if(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,32}$/.test(user.value.password)) {
+        resetModalLoading.value = true;
+        // md5 加密传输
+        user.value.password = hexMd5(user.value.password + KEY);
 
-      // md5 加密传输
-      user.value.password = hexMd5(user.value.password + KEY);
+        axios.post("/user/reset-password", user.value).then((response) => {
+          resetModalLoading.value = false;
+          const data = response.data;
+          if(data.success){
+            resetModalVisible.value = false;
 
-      axios.post("/user/reset-password", user.value).then((response) => {
-        resetModalLoading.value = false;
-        const data = response.data;
-        if(data.success){
-          resetModalVisible.value = false;
-
-          // 重新加载列表
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize
-          });
-        } else {
-          message.error(data.message);
-        }
-      })
+            // 重新加载列表
+            handleQuery({
+              page: pagination.value.current,
+              size: pagination.value.pageSize
+            });
+          } else {
+            message.error(data.message);
+          }
+        })
+      } else {
+        message.error("【密码】至少包含 数字和英文，长度为6~32");
+      }
     };
 
     onMounted(() => {
