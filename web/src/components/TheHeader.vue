@@ -5,7 +5,7 @@
         <span>登录</span>
       </a>
       <a class="loginMenu" v-show="user.id">
-        <span>您好：{{user.name}}</span>
+        <span style="fontSize:13px;">您好：</span>{{user.name}}
       </a>
       <a-menu
         theme="dark"
@@ -49,6 +49,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import store from '@/store';
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 
@@ -82,6 +83,7 @@ export default defineComponent({
         const data = response.data;
         if (data.success) {
           user.value = data.content;
+          store.commit("setUser", user.value);
           loginModalVisible.value = false;
           message.success("登录成功！");
         } else {
