@@ -7,9 +7,11 @@ import com.zhangkun.wiki.domain.UserExample;
 import com.zhangkun.wiki.exception.BusinessException;
 import com.zhangkun.wiki.exception.BusinessExceptionCode;
 import com.zhangkun.wiki.mapper.UserMapper;
+import com.zhangkun.wiki.req.UserLoginReq;
 import com.zhangkun.wiki.req.UserQueryReq;
 import com.zhangkun.wiki.req.UserResetPasswordReq;
 import com.zhangkun.wiki.req.UserSaveReq;
+import com.zhangkun.wiki.resp.UserLoginResp;
 import com.zhangkun.wiki.resp.UserQueryResp;
 import com.zhangkun.wiki.resp.PageResp;
 import com.zhangkun.wiki.util.CopyUtil;
@@ -20,6 +22,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
+
 
 @Service
 public class UserService {
@@ -115,5 +118,26 @@ public class UserService {
     public void resetPassword(UserResetPasswordReq req) {
         User user = CopyUtil.copy(req, User.class);
         userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    /**
+     * 登录
+     * @param req
+     */
+    public UserLoginResp login(UserLoginReq req) {
+        User userDB = selectByLoginName(req.getLoginName());
+        if(ObjectUtils.isEmpty(userDB)) {
+            // 用户名不存在
+            throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+        } else {
+            if(userDB.getPassword().equals(req.getPassword())) {
+                // 登录成功
+                UserLoginResp userLoginResp = CopyUtil.copy(userDB, UserLoginResp.class);
+                return userLoginResp;
+            } else {
+                // 密码错误
+                throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+            }
+        }
     }
 }

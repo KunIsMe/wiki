@@ -1,9 +1,11 @@
 package com.zhangkun.wiki.controller;
 
+import com.zhangkun.wiki.req.UserLoginReq;
 import com.zhangkun.wiki.req.UserQueryReq;
 import com.zhangkun.wiki.req.UserResetPasswordReq;
 import com.zhangkun.wiki.req.UserSaveReq;
 import com.zhangkun.wiki.resp.CommonResp;
+import com.zhangkun.wiki.resp.UserLoginResp;
 import com.zhangkun.wiki.resp.UserQueryResp;
 import com.zhangkun.wiki.resp.PageResp;
 import com.zhangkun.wiki.service.UserService;
@@ -52,6 +54,16 @@ public class UserController {
 
         CommonResp resp = new CommonResp<>();
         userService.resetPassword(req);
+        return resp;
+    }
+
+    @PostMapping("/login")
+    public CommonResp login(@Valid @RequestBody UserLoginReq req) {
+        // md5 加密存储
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonResp<UserLoginResp> resp = new CommonResp<>();
+        UserLoginResp userLoginResp = userService.login(req);
+        resp.setContent(userLoginResp);
         return resp;
     }
 }
