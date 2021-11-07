@@ -15,6 +15,7 @@ import com.zhangkun.wiki.util.CopyUtil;
 import com.zhangkun.wiki.util.RedisUtil;
 import com.zhangkun.wiki.util.RequestContext;
 import com.zhangkun.wiki.util.SnowFlake;
+import com.zhangkun.wiki.websocket.WebSocketServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -38,6 +39,9 @@ public class DocService {
 
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     /**
      * 文档列表请求（不分页）
@@ -132,6 +136,10 @@ public class DocService {
         } else {
             throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
         }
+
+        // 推送消息
+        Doc docDB = docMapper.selectByPrimaryKey(id);
+        webSocketServer.sendInfo("【" + docDB.getName() + "】被点赞啦！");
     }
 
     /**
