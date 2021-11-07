@@ -6,6 +6,7 @@ import com.zhangkun.wiki.domain.Doc;
 import com.zhangkun.wiki.domain.DocExample;
 import com.zhangkun.wiki.mapper.ContentMapper;
 import com.zhangkun.wiki.mapper.DocMapper;
+import com.zhangkun.wiki.mapper.DocMapperCust;
 import com.zhangkun.wiki.req.DocSaveReq;
 import com.zhangkun.wiki.resp.DocQueryResp;
 import com.zhangkun.wiki.util.CopyUtil;
@@ -24,6 +25,9 @@ public class DocService {
 
     @Autowired
     private ContentMapper contentMapper;
+
+    @Autowired
+    private DocMapperCust docMapperCust;
 
     @Autowired
     private SnowFlake snowFlake;
@@ -53,14 +57,16 @@ public class DocService {
         Doc doc = CopyUtil.copy(req, Doc.class);
         Content content = CopyUtil.copy(req, Content.class);
         if(ObjectUtils.isEmpty(req.getId())){
-            // 新增电子书
+            // 新增文档
             doc.setId(snowFlake.nextId());
+            doc.setViewCount(0);
+            doc.setVoteCount(0);
             docMapper.insert(doc);
 
             content.setId(doc.getId());
             contentMapper.insert(content);
         } else {
-            // 编辑电子书
+            // 编辑文档
             docMapper.updateByPrimaryKey(doc);
 
             int count = contentMapper.updateByPrimaryKeyWithBLOBs(content);
@@ -91,8 +97,15 @@ public class DocService {
         contentMapper.deleteByExample(contentExample);
     }
 
+    /**
+     * 查找对应文档内容
+     * @param id
+     * @return
+     */
     public String findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
+        // 文档阅读数+1
+        docMapperCust.increaseViewCount(id);
         if(ObjectUtils.isEmpty(content)){
             return "";
         } else {

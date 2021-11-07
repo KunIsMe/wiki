@@ -2,8 +2,10 @@ package com.zhangkun.wiki.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zhangkun.wiki.domain.DocExample;
 import com.zhangkun.wiki.domain.Ebook;
 import com.zhangkun.wiki.domain.EbookExample;
+import com.zhangkun.wiki.mapper.DocMapper;
 import com.zhangkun.wiki.mapper.EbookMapper;
 import com.zhangkun.wiki.req.EbookQueryReq;
 import com.zhangkun.wiki.req.EbookSaveReq;
@@ -22,6 +24,9 @@ public class EbookService {
 
     @Autowired
     private EbookMapper ebookMapper;
+
+    @Autowired
+    private DocMapper docMapper;
 
     @Autowired
     private SnowFlake snowFlake;
@@ -92,5 +97,11 @@ public class EbookService {
      */
     public void delete(Long id) {
         ebookMapper.deleteByPrimaryKey(id);
+
+        // 同时要删除掉相对应的文档表数据
+        DocExample docExample = new DocExample();
+        DocExample.Criteria criteria = docExample.createCriteria();
+        criteria.andEbookIdEqualTo(id);
+        docMapper.deleteByExample(docExample);
     }
 }
