@@ -133,4 +133,11 @@ public class DocService {
             throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
         }
     }
+
+    /**
+     * 定时更新内容（文档数、阅读数、点赞数）到电子书
+     */
+    public void updateEbookInfo() {
+        docMapperCust.updateEbookInfo();
+    }
 }
