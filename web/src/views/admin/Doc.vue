@@ -6,12 +6,12 @@
         <a-row :gutter="24">
           <a-col :span="8">
             <div class="docsSerch">
-              <a-input-search
+              <!-- <a-input-search
                 v-model:value="param.name"
                 placeholder="名称"
                 enter-button
                 @search="handleQuery()"
-              />
+              /> -->
               <a-button type="primary" @click="add">
                 新增
               </a-button>
@@ -95,12 +95,6 @@
 
       </a-layout-content>
   </a-layout>
-  <!-- <a-modal
-   title="文档表单"
-   v-model:visible="modalVisible"
-   :confirm-loading="modalLoading"
-   @ok="handleModalOk">
-  </a-modal> -->
 </template>
 
 <script lang="ts">
