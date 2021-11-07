@@ -15,6 +15,7 @@ import com.zhangkun.wiki.util.CopyUtil;
 import com.zhangkun.wiki.util.RedisUtil;
 import com.zhangkun.wiki.util.RequestContext;
 import com.zhangkun.wiki.util.SnowFlake;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -138,7 +139,8 @@ public class DocService {
 
         // 推送消息（异步化）
         Doc docDB = docMapper.selectByPrimaryKey(id);
-        wsService.sendInfo("【" + docDB.getName() + "】被点赞啦！");
+        String logId = MDC.get("LOG_ID");
+        wsService.sendInfo("【" + docDB.getName() + "】被点赞啦！", logId);
     }
 
     /**
