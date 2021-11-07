@@ -50,7 +50,11 @@ export default defineComponent({
         token = Tool.uuid(10);
         // 连接地址：ws://127.0.0.1:8880/ws/xxx
         websocket = new WebSocket(process.env.VUE_APP_WS_SERVER + '/ws/' + token);
-        initWebSocket()
+        // initWebSocket();
+        // 加此判断可以只让登录的用户接收到WebSocket的推送
+        if(user.value.id) {
+          initWebSocket();
+        }
 
         // 关闭
         // websocket.close();
