@@ -168,11 +168,11 @@ export default defineComponent({
             level1.value = Tool.array2Tree(docs.value, 0);
 
             // 父文档下拉框初始化，相当于点击新增
-            treeSelectData.value = Tool.copy(level1.value);
+            treeSelectData.value = Tool.copy(level1.value) || [];
             // 修复当电子书中没有文档时，无法新建文档的bug
-            if(!treeSelectData.value) {
-              treeSelectData.value = [];
-            }
+            // if(!treeSelectData.value) {
+            //   treeSelectData.value = [];
+            // }
             // 为选择树添加一个“无”
             treeSelectData.value.unshift({id: 0, name: '无'});
           } else {
@@ -273,11 +273,11 @@ export default defineComponent({
         ebookId: route.query.ebookId
       };
 
-      treeSelectData.value = Tool.copy(level1.value);
+      treeSelectData.value = Tool.copy(level1.value) || [];
       // 修复当电子书中没有文档时，无法新建文档的bug
-      if(!treeSelectData.value) {
-        treeSelectData.value = [];
-      }
+      // if(!treeSelectData.value) {
+      //   treeSelectData.value = [];
+      // }
       treeSelectData.value.unshift({id: 0, name: '无'});
 
       modalVisible.value = true;
