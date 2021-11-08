@@ -29,7 +29,7 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
       >
         <div class="welcome" v-show="isShowWelcome">
-          <h1>欢迎使用 wiki 知识库</h1>
+          <Welcome />
         </div>
         <a-list item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks1" v-show="!isShowWelcome">
           <template #renderItem="{ item }">
@@ -68,9 +68,11 @@ import { defineComponent, onMounted, ref, reactive, toRefs } from 'vue';
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 import { Tool } from '@/util/tool';
+import Welcome from '@/components/Welcome.vue'
 
 export default defineComponent({
   name: 'Home',
+  components: { Welcome },
   setup () {
     const ebooks1 = ref();
     const ebooks2 = reactive({ ebooks: [] });
