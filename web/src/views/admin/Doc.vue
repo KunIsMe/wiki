@@ -407,4 +407,10 @@ export default defineComponent({
       font-size: 16px !important;
       font-weight: 600;
   }
+
+  /* 图片自适应 */
+  .wangeditor img {
+    max-width: 100%;
+    height: auto;
+  }
 </style>
