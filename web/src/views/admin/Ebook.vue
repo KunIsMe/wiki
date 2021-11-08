@@ -193,7 +193,8 @@ export default defineComponent({
 
     // 新增页面显示
     const add = () => {
-      ebook.value = {};
+      // 新增使用默认封面图地址
+      ebook.value = { cover: '/image/cover1.png' };
       categoryIds.value = [];
       modalVisible.value = true;
     };

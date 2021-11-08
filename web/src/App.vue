@@ -18,7 +18,7 @@ export default defineComponent({
 </script>
 
 <style>
-.logo {
+/* .logo {
   float: left;
   width: 120px;
   height: 31px;
@@ -29,7 +29,7 @@ export default defineComponent({
 .ant-row-rtl #components-layout-demo-top-side-2 .logo {
   float: right;
   margin: 16px 0 16px 24px;
-}
+} */
 
 .site-layout-background {
   background: #fff;
