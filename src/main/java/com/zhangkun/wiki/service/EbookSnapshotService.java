@@ -25,4 +25,13 @@ public class EbookSnapshotService {
         List<StatisticResp> statisticResp = ebookSnapshotMapperCust.getStatistic();
         return statisticResp;
     }
+
+    /**
+     * 30天数值统计（阅读数、点赞数）【每日新增】
+     * @return
+     */
+    public List<StatisticResp> get30Statistic() {
+        List<StatisticResp> statisticResp = ebookSnapshotMapperCust.get30Statistic();
+        return statisticResp;
+    }
 }
