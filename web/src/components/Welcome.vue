@@ -89,7 +89,7 @@
   <br />
   <a-row>
     <a-col :span="24" id="main-col">
-      <div id="main" style="width:85%;height:300px;"></div>
+      <div id="main" style="width:100%;height:300px;"></div>
     </a-col>
   </a-row>
 </template>
@@ -142,28 +142,72 @@ export default defineComponent({
       });
     };
 
-    const testEcharts = () => {
+    // 获取30天统计数据（阅读数、点赞数）【每日增量】
+    const init30DayEcharts = (list: any) => {
+      // 发布生产后会出现问题：切到别的页面，再切回首页，报表显示不出来
+      // 解决方法：把原来的id=main的区域清空，重新初始化（innerHTML）
+      const mainDom = document.getElementById('main-col');
+      if (mainDom) {
+        mainDom.innerHTML = '<div id="main" style="width:100%;height:300px;"></div>';
+      }
+      
       // 基于准备好的dom，初始化echarts实例
       const myChart = echarts.init(document.getElementById('main') as HTMLElement);
+
+      const xAxis = [];
+      const seriesView = [];
+      const seriesVote = [];
+      for (let i = 0; i < list.length; i++) {
+        const record = list[i];
+        xAxis.push(record.date);
+        seriesView.push(record.viewIncrease);
+        seriesVote.push(record.voteIncrease);
+      }
 
       // 指定图表的配置项和数据
       const option = {
         title: {
-          text: 'ECharts 入门示例'
+          text: '【阅读量、点赞量】30天趋势图'
         },
-        tooltip: {},
+        tooltip: {
+          trigger: 'axis'
+        },
         legend: {
-          data: ['销量']
+          data: ['总阅读量', '总点赞量']
+        },
+        grid: {
+          left: '1%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
         },
         xAxis: {
-          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+          type: 'category',
+          boundaryGap: false,
+          data: xAxis
         },
-        yAxis: {},
+        yAxis: {
+          type: 'value'
+        },
         series: [
           {
-            name: '销量',
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
+            name: '总阅读量',
+            type: 'line',
+            // stack: '总量', 不堆叠
+            data: seriesView,
+            smooth: true
+          },
+          {
+            name: '总点赞量',
+            type: 'line',
+            // stack: '总量', 不堆叠
+            data: seriesVote,
+            smooth: true
           }
         ]
       };
@@ -172,9 +216,19 @@ export default defineComponent({
       myChart.setOption(option);
     }
 
+    const get30DayStatistic = () => {
+      axios.get('/ebook-snapshot/get-30-statistic').then((response) => {
+        const data = response.data;
+        if (data.success) {
+          const statisticList = data.content;
+          init30DayEcharts(statisticList)
+        }
+      });
+    }
+
     onMounted(() => {
       getStatistic();
-      testEcharts();
+      get30DayStatistic();
     })
 
     return { statistic }
