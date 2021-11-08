@@ -2690,6 +2690,14 @@
     "jsbn" "~0.1.0"
     "safer-buffer" "^2.1.0"
 
+"echarts@^5.2.2":
+  "integrity" "sha1-7DyLKhUcu6cbo8LHz5svIEfOQ3A="
+  "resolved" "https://registry.npmmirror.com/echarts/download/echarts-5.2.2.tgz"
+  "version" "5.2.2"
+  dependencies:
+    "tslib" "2.3.0"
+    "zrender" "5.2.1"
+
 "ee-first@1.1.1":
   "integrity" "sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0="
   "resolved" "https://registry.npm.taobao.org/ee-first/download/ee-first-1.1.1.tgz"
@@ -7595,6 +7603,11 @@
   "resolved" "https://registry.nlark.com/tslib/download/tslib-1.14.1.tgz"
   "version" "1.14.1"
 
+"tslib@2.3.0":
+  "integrity" "sha1-gDuM2rPhK6WBpMpByIObuw2ssJ4="
+  "resolved" "https://registry.nlark.com/tslib/download/tslib-2.3.0.tgz"
+  "version" "2.3.0"
+
 "tslint@^5.20.1":
   "integrity" "sha512-EcMxhzCFt8k+/UP5r8waCf/lzmeSyVlqxqMEDQE7rWYiQky8KpIBz1JAoYXfROHrPZ1XXd43q8yQnULOLiBRQg== sha1-5AHortoBUrxE3QfmFANPP4DGe30="
   "resolved" "https://registry.nlark.com/tslint/download/tslint-5.20.1.tgz"
@@ -8369,3 +8382,10 @@
     "is-ci" "^1.0.10"
     "normalize-path" "^1.0.0"
     "strip-indent" "^2.0.0"
+
+"zrender@5.2.1":
+  "integrity" "sha1-X0u9qRW6bUErCxncJDG+qtBUF7s="
+  "resolved" "https://registry.nlark.com/zrender/download/zrender-5.2.1.tgz"
+  "version" "5.2.1"
+  dependencies:
+    "tslib" "2.3.0"
