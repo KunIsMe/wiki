@@ -1,6 +1,6 @@
 <template>
     <a-layout-header class="header">
-      <div class="logo" />
+      <div class="logo">wiki电子书</div>
       <a class="loginMenu" v-show="!user.id" @click="showLoginModal">
         <span>登录</span>
       </a>
@@ -129,5 +129,13 @@ export default defineComponent({
 }
 a:hover {
   color: lightskyblue;
+}
+.logo {
+  width: 120px;
+  height: 31px;
+  float: left;
+  color: white;
+  font-size: 18px;
+  margin-left: -10px;
 }
 </style>
